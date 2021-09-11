@@ -9,12 +9,13 @@ pub struct Users {
     pub name: String,    
     pub adress: String,    
     pub telephone: String,    
+    pub email: String,    
     pub password: String,    
     pub comments: String,
     pub created_at: chrono::NaiveDateTime,
 }
 
-#[derive(Insertable, Debug)]
+#[derive(Insertable, Debug, Queryable)]
 #[table_name = "tbusers"]
 pub struct NewUser<'a> {
     pub name: &'a str,

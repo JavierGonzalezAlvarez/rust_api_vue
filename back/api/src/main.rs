@@ -36,13 +36,20 @@ async fn main() -> std::io::Result<()> {
         //Auth0
             //.wrap(auth)
             .data(pool.clone())
+            
             //endpoint => http://127.0.0.1:8080/
             .route("/", web::get().to(handlers::hello))    
+            
             //endpoint => http://127.0.0.1:8080/users
             .route("/users", web::get().to(handlers::get_users))
-            //.route("/solicitants/{id}", web::get().to(handlers::get_user_by_id))
-            //.route("/solicitants", web::post().to(handlers::add_user))
-            //.route("/solicitants/{id}", web::delete().to(handlers::delete_user))
+            
+            //endpoint => 
+            //.route("/userid/{id}", web::get().to(handlers::get_user_by_id))
+            
+            //endpoint => http://127.0.0.1:8080/adduser
+            .route("/adduser", web::post().to(handlers::add_user))
+
+            //.route("/userdelete/{id}", web::delete().to(handlers::delete_user))
     })
     .bind("127.0.0.1:8080")?            
     .run()
