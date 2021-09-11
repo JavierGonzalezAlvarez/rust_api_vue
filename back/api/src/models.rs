@@ -1,22 +1,27 @@
-extern crate tokio_pg_mapper_derive;
-extern crate tokio_pg_mapper;
+// src/models.rs
 
+use crate::schema::*;
 use serde::{Deserialize, Serialize};
 
-use tokio_pg_mapper::FromTokioPostgresRow;
-use tokio_pg_mapper_derive::PostgresMapper;
-
-#[derive(Serialize, Deserialize)]
-//nombre de la tabla
-#[derive(PostgresMapper)]
-#[pg_mapper(table = "users")]
-pub struct tbusers {
-    pub id: i64,
+#[derive(Debug, Serialize, Deserialize, Queryable)]
+pub struct Users {
+    pub id: i32,
     pub name: String,    
     pub adress: String,    
     pub telephone: String,    
-    pub email: Option<String>,
     pub password: String,    
-    pub comments: String
+    pub comments: String,
+    pub created_at: chrono::NaiveDateTime,
 }
 
+#[derive(Insertable, Debug)]
+#[table_name = "tbusers"]
+pub struct NewUser<'a> {
+    pub name: &'a str,
+    pub adress: &'a str,    
+    pub telephone: &'a str,
+    pub email: &'a str,
+    pub password: &'a str,
+    pub comments: &'a str,
+    pub created_at: chrono::NaiveDateTime,
+}

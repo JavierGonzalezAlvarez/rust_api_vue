@@ -1,6 +1,8 @@
 # app en rust y vue
 
 ## instalar rust en linux
+https://www.rust-lang.org/learn/get-started
+
 $ sudo apt update 
 $ sudo apt upgrade
 $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh 
@@ -69,4 +71,7 @@ $ cargo run
 https://actix.rs/docs/getting-started/
 
 
+## crear modulos
+handlers.rs
+models.rs
 

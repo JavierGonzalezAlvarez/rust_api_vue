@@ -2,7 +2,7 @@ table! {
     tbusers (id) {
         id -> Int4,
         name -> Text,
-        adresss -> Text,
+        adress -> Text,
         telephone -> Text,
         email -> Text,
         password -> Text,

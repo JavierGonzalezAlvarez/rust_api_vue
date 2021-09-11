@@ -1,34 +1,42 @@
-//creamos este fichero para organizar.
-//Metemos aqui las rutas
+//endpoints
 
-use actix_web::{HttpResponse, Responder};
+// dependencias
+use super::models::{NewUser, Users};
+use super::schema::tbusers::dsl::*;
+use super::Pool;
+use crate::diesel::QueryDsl;
+use crate::diesel::RunQueryDsl;
+use actix_web::{web, Error, HttpResponse, Responder};
+use diesel::dsl::{delete, insert_into};
+use serde::{Deserialize, Serialize};
+use std::vec::Vec;
 
-//endpoint => http://127.0.0.1:8080/
+#[derive(Debug, Serialize, Deserialize)]
+pub struct InputUser {
+    pub name: String,
+    pub adress: String,
+    pub telephone: String,
+    pub email: String,
+    pub password: String,
+    pub comments: String,
+}
+
+//GET /users
+pub async fn get_users(db: web::Data<Pool>) -> Result<HttpResponse, Error> {
+    Ok(web::block(move || get_all_users(db))
+        .await
+        .map(|user| HttpResponse::Ok().json(user))
+        .map_err(|_| HttpResponse::InternalServerError())?)
+}
+
+fn get_all_users(pool: web::Data<Pool>) -> Result<Vec<Users>, diesel::result::Error> {
+    let conn = pool.get().unwrap();
+    let items = tbusers.load::<Users>(&conn)?;
+    Ok(items)
+}
+
+// Ruta inicial: /
 pub async fn hello() -> impl Responder {
     HttpResponse::Ok().body("api en rust")
 }
 
-//HttpResponse
-//endpoint => http://127.0.0.1:8080/hey_1
-pub async fn status_1() -> impl Responder {
-    //esto es lo que se devuelve en el navegador => status_1
-    HttpResponse::Ok().body("status_11")
-}
-
-// devuelve un json
-//endpoint => http://127.0.0.1:8080/hey_2
-pub async fn status_2() -> impl Responder {
-    "{\"nombre\": \"javier\"}"    // esto genera un objeto =>  {"nombre": "javier"}
-}
-
-//endpoint => http://127.0.0.1:8080/hey_3
-// devuelve un json, otra forma
-pub async fn status_3() -> impl Responder {
-    //"hola"
-    HttpResponse::Ok()
-        //.content_type("application/xml")
-        .content_type("application/json")
-        //.content_type("text/html")
-        .body("{\"nombre\": \"javier\"}" )
-        //.json(Status { status_3: "UP".to_string() })
-}
