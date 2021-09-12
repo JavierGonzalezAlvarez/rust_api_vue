@@ -70,7 +70,6 @@ $ cargo run
 ## framework actix.rs para crear una api
 https://actix.rs/docs/getting-started/
 
-
 ## crear modulos
 handlers.rs
 models.rs
