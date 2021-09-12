@@ -1,4 +1,4 @@
-// declar modulos
+// declarar modulos
 mod handlers;
 mod models;
 mod schema;
@@ -7,7 +7,7 @@ mod schema;
 extern crate diesel;
 
 // dependencies here
-use actix_web::{dev::ServiceRequest, web, App, Error, HttpServer};
+use actix_web::{web, App, HttpServer};
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager};
 
@@ -49,7 +49,8 @@ async fn main() -> std::io::Result<()> {
             //endpoint => http://127.0.0.1:8080/adduser
             .route("/adduser", web::post().to(handlers::add_user))
 
-            //.route("/userdelete/{id}", web::delete().to(handlers::delete_user))
+            //endpoint => http://127.0.0.1:8080/deleteuser/id
+            .route("/deleteuser/{id}", web::delete().to(handlers::delete_user))
     })
     .bind("127.0.0.1:8080")?            
     .run()
