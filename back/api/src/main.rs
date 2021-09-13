@@ -6,6 +6,10 @@ mod schema;
 #[macro_use]
 extern crate diesel;
 
+//cors
+use actix_cors::Cors;
+use actix_web::http::header;
+
 // dependencies here
 use actix_web::{web, App, HttpServer};
 use diesel::prelude::*;
@@ -23,14 +27,23 @@ async fn main() -> std::io::Result<()> {
     let manager = ConnectionManager::<PgConnection>::new(database_url);
     let pool: Pool = r2d2::Pool::builder()
          .build(manager)
-        .expect("Failed to create pool.");   // en vez de poner ? coloco expect() para controlar el error
+        .expect("Failed to create pool.");   // en vez de poner ? coloco expect() para controlar el error    
 
-    println!("Server at http://127.0.0.1:8080");    
+    println!("Server at http://127.0.0.1:8080");  
 
     // Start http server
     HttpServer::new(move || {
         //Auth0
         //let auth = HttpAuthentication::bearer(validator);
+        
+        let _cors = Cors::default()        
+        .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
+        .allowed_header(header::CONTENT_TYPE)
+        .allowed_header(header::ACCESS_CONTROL_ALLOW_ORIGIN)
+        //.allowed_origin("http://127.0.0.1:8081")        
+        .allowed_origin("*")    
+        .allowed_methods(vec!["GET", "POST"])        
+        .max_age(3600);                
 
         App::new()
         //Auth0

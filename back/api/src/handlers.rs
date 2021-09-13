@@ -34,7 +34,8 @@ pub async fn hello() -> impl Responder {
 pub async fn get_users(db: web::Data<Pool>) -> Result<HttpResponse, Error> {
     Ok(web::block(move || get_all_users(db))
         .await
-        .map(|user| HttpResponse::Ok().json(user))
+        //.map(|user| HttpResponse::Ok().json(user))        
+        .map(|user| HttpResponse::Ok().json(user))                
         .map_err(|_| HttpResponse::InternalServerError())?)
 }
 

@@ -44,6 +44,7 @@ export default {
       menu: [
         { ruta: "/", nombre: "Inicio", icono: "home" },
         { ruta: "/user", nombre: "Usuarios", icono: "group" },
+        { ruta: "/userlistado", nombre: "Listado", icono: "summarize" },
       ],
     };
   },

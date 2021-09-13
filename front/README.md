@@ -41,3 +41,7 @@ $ npm install vue-router
 
 ## crea componete usuario
 components/usuario.vue
+
+## icons material design
+https://fonts.google.com/icons?selected=Material+Icons
+

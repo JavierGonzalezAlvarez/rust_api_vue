@@ -22,6 +22,11 @@ actix-service = "1.0.1"
 alcoholic_jwt = "1.0.0"
 reqwest = "0.9.22"
 actix-rt = "1.0.0"
+actix-cors = "0.5.4"
+
+#https://docs.rs/actix-cors/0.5.4/actix_cors/
+#https://crates.io/crates/actix-cors
+
 
 #email
 lettre = "0.9.5"
