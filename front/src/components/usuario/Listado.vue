@@ -11,7 +11,7 @@
       <template v-slot:top>
         <v-text-field
           v-model="search"
-          label="Buscar (UPPER CASE ONLY)"
+          label="Buscar (EN MAYUSCULA)"
           class="mx-4"
         ></v-text-field>
       </template>
@@ -91,17 +91,16 @@ export default {
 
   methods: {
     async iniciar() {
-      //try {
-      this.loading = true;
-      let r = await this.api.getUser();
-      this.items = r;
-      //console.log(this.items);
-      console.log("respuesta 4 =>", this.items);
-      //} catch (error) {
-      //  console.log(error);
-      //} finally {
-      //  this.loading = false;
-      //}
+      try {
+        this.loading = true;
+        let r = await this.api.getUser();
+        this.items = r;
+        console.log(this.items);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.loading = false;
+      }
     },
 
     filterOnlyCapsText(value, search) {

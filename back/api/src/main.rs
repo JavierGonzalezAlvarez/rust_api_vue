@@ -11,7 +11,9 @@ use actix_cors::Cors;
 use actix_web::http::header;
 
 // dependencies here
+//use actix_web::{web, App, HttpServer, http::header};
 use actix_web::{web, App, HttpServer};
+
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager};
 
@@ -22,32 +24,34 @@ pub type Pool = r2d2::Pool<ConnectionManager<PgConnection>>;
 async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
     std::env::set_var("RUST_LOG", "actix_web=debug");
-    let database_url = std::env::var("DATABASE_URL").expect("set DATABASE_URL");
+    let database_url = std::env::var("DATABASE_URL").expect("Failed to set DATABASE_URL");
     // create db connection pool
     let manager = ConnectionManager::<PgConnection>::new(database_url);
     let pool: Pool = r2d2::Pool::builder()
          .build(manager)
-        .expect("Failed to create pool.");   // en vez de poner ? coloco expect() para controlar el error    
+        .expect("Failed to create pool.");  // en vez de poner ? coloco expect() para controlar el error    
 
     println!("Server at http://127.0.0.1:8080");  
 
     // Start http server
-    HttpServer::new(move || {
-        //Auth0
-        //let auth = HttpAuthentication::bearer(validator);
+    HttpServer::new(move || {                    
+        // docs => https://actix.rs/actix-extras/actix_cors/struct.Cors.html
+        let cors = Cors::default()        
+            // no funciona para 127.0.0.1 ni para *.*            
+            //.allowed_origin("http://127.0.0.1:8081")        
+            .allowed_origin("http://localhost:8081")        
+            //.allowed_origin("*.*")    
+            .allowed_methods(vec!["GET", "POST"])        
+            .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
+            .allowed_header(header::CONTENT_TYPE)            
+            .allowed_header(header::ACCESS_CONTROL_ALLOW_ORIGIN)            
+            .max_age(3600);
         
-        let _cors = Cors::default()        
-        .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
-        .allowed_header(header::CONTENT_TYPE)
-        .allowed_header(header::ACCESS_CONTROL_ALLOW_ORIGIN)
-        //.allowed_origin("http://127.0.0.1:8081")        
-        .allowed_origin("*")    
-        .allowed_methods(vec!["GET", "POST"])        
-        .max_age(3600);                
-
         App::new()
+        //Cors
+            .wrap(cors)  
         //Auth0
-            //.wrap(auth)
+            //.wrap(auth)                 
             .data(pool.clone())
             
             //endpoint => http://127.0.0.1:8080/

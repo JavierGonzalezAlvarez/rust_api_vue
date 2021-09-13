@@ -19,17 +19,20 @@ export default class Api {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
       }
+
     });
+
     const items = await res.json();
     console.log("respuesta 0 =>", items);
 
     if (items.results === undefined) {
+      console.log("respuesta 2 =>", items);
       return items
     }
 
+    console.log("respuesta 3 =>", items);
     return items.results;
   }
-
 
 
 }
