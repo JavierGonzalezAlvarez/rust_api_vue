@@ -41,7 +41,6 @@ export default {
     return {
       items: [],
       api: new ApiUser(),
-      loading: false,
       search: "",
       headers: [
         { text: "ID", value: "id" },
